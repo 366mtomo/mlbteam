@@ -1,17 +1,37 @@
 <template>
   <div id="app">
     <img alt="Vue logo" src="./assets/logo.png" />
-    <HelloWorld msg="Welcome to Your Vue.js App" />
+    <button v-on:click="getContents()">ボタン</button>
   </div>
 </template>
-
 <script>
-import HelloWorld from "./components/HelloWorld.vue";
-
 export default {
-  name: "App",
-  components: {
-    HelloWorld
+  data: function() {
+    return {
+      content: ""
+    };
+  },
+  computed: {},
+  methods: {
+    getContents: function() {
+      console.log("a");
+      //const display = document.getElementById("display");
+      this.axios({
+        url: "https://ja.wikipedia.org/w/api.php",
+        method: "GET",
+        params: {
+          format: "json",
+          action: "query",
+          prop: "revisions",
+          rvprop: "content",
+          titles: "利根川"
+        }
+      }).then(res => {
+        console.log(res);
+      });
+
+      return this.content;
+    }
   }
 };
 </script>
