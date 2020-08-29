@@ -16,17 +16,13 @@ export default {
   methods: {
     getContents: function() {
       this.axios({
-        url: "https://ja.wikipedia.org/w/api.php",
-        method: "GET",
-        params: {
-          format: "json",
-          action: "query",
-          prop: "revisions",
-          rvprop: "content",
-          titles: this.text
-        }
+        url:
+          "https://ja.wikipedia.org/w/api.php?format=json&action=query&generator=random&grnnamespace=0&prop=revisions&rvprop=content&indexpageids",
+        method: "GET"
       }).then(res => {
-        console.log(res.data.query.pages[13901].revisions[0]["*"]);
+        const pageId = res.data.query.pageids[0];
+        console.log(pageId);
+        console.log(res.data.query.pages[pageId].revisions[0]["*"]);
       });
 
       return this.content;
