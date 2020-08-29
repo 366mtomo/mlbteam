@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png" />
+    <input type="text" v-model="text" />
     <button v-on:click="getContents()">ボタン</button>
   </div>
 </template>
@@ -8,14 +8,13 @@
 export default {
   data: function() {
     return {
-      content: ""
+      content: "",
+      text: "利根川"
     };
   },
   computed: {},
   methods: {
     getContents: function() {
-      console.log("a");
-      //const display = document.getElementById("display");
       this.axios({
         url: "https://ja.wikipedia.org/w/api.php",
         method: "GET",
@@ -24,10 +23,10 @@ export default {
           action: "query",
           prop: "revisions",
           rvprop: "content",
-          titles: "利根川"
+          titles: this.text
         }
       }).then(res => {
-        console.log(res);
+        console.log(res.data.query.pages[13901].revisions[0]["*"]);
       });
 
       return this.content;
