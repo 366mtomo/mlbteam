@@ -1,6 +1,5 @@
 <template>
   <div id="app">
-    <input type="text" v-model="text" />
     <button v-on:click="getContents()">ボタン</button>
   </div>
 </template>
@@ -9,7 +8,8 @@ export default {
   data: function() {
     return {
       content: "",
-      text: "利根川"
+      words: [],
+      title: ""
     };
   },
   computed: {},
@@ -21,11 +21,37 @@ export default {
         method: "GET"
       }).then(res => {
         const pageId = res.data.query.pageids[0];
-        console.log(pageId);
-        console.log(res.data.query.pages[pageId].revisions[0]["*"]);
+        this.content = res.data.query.pages[pageId].revisions[0]["*"];
+        this.title = res.data.query.pages[pageId].title;
+        this.content = res.data.query.pages[pageId].revisions[0]["*"];
+        console.log(this.title);
+        console.log(this.content);
+        this.getWords(this.content);
       });
-
-      return this.content;
+    },
+    getWords: function(str) {
+      let array = str.split("");
+      let isLink = false;
+      let word = "";
+      this.words = [];
+      for (let i = 1; i < array.length - 1; i++) {
+        if (array[i] == "]") {
+          if (array[i + 1] == "]") {
+            isLink = false;
+            this.words.push(word);
+            word = "";
+          }
+        }
+        if (isLink) {
+          word = word.concat(array[i]);
+        }
+        if (array[i] == "[") {
+          if (array[i - 1] == "[") {
+            isLink = true;
+          }
+        }
+      }
+      console.log(this.words);
     }
   }
 };
