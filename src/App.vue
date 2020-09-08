@@ -1,6 +1,12 @@
 <template>
   <div id="app">
-    <button v-on:click="getContents()">ボタン</button>
+    <div>
+      <button v-on:click="getContents()">ボタン</button>
+    </div>
+    <div>
+      <input type="text" v-model="answerText" />
+      <button v-on:click="checkAnswer()">回答</button>
+    </div>
   </div>
 </template>
 <script>
@@ -9,7 +15,9 @@ export default {
     return {
       content: "",
       words: [],
-      title: ""
+      title: "",
+      answerText: "",
+      categories: []
     };
   },
   computed: {},
@@ -38,7 +46,12 @@ export default {
         if (array[i] == "]") {
           if (array[i + 1] == "]") {
             isLink = false;
-            this.words.push(word);
+            if (word.match(/Category:/)) {
+              word = word.split("Category:").join("");
+              this.categories.push(word);
+            } else {
+              this.words.push(word);
+            }
             word = "";
           }
         }
@@ -52,6 +65,15 @@ export default {
         }
       }
       console.log(this.words);
+      console.log(this.categories);
+    },
+    checkAnswer: function() {
+      if (this.answerText == this.title) {
+        console.log("正解！");
+      } else {
+        console.log("残念！");
+      }
+      this.answerText = "";
     }
   }
 };
