@@ -49,14 +49,14 @@ export default {
         this.content = res.data.query.pages[pageId].revisions[0]["*"];
         this.title = res.data.query.pages[pageId].title;
         this.content = res.data.query.pages[pageId].revisions[0]["*"];
-        this.answerURL = "https://ja.wikipedia.org/wiki/" + this.title;
+        this.answerURL = "https://ja.wikipedia.org/wiki/" + this.title; //
         console.log(this.title);
         console.log(this.content);
         this.getWords(this.content);
-        this.randomWordsSelect();
-        this.randomCategoriesSelect();
-        var target = document.getElementById("answer");
-        target.href = this.answerURL;
+        this.randomWordsSelect(); //
+        this.randomCategoriesSelect(); //
+        var target = document.getElementById("answer"); //
+        target.href = this.answerURL; //
       });
     },
     getWords: function(str) {
@@ -71,6 +71,7 @@ export default {
             isLink = false;
             if (word.match(/Category:/)) {
               word = word.split("Category:").join("");
+              //ここから
               for (let t = 0; t < this.categories; t++) {
                 if (this.categories[t] === word) {
                   isDup = true;
@@ -90,6 +91,7 @@ export default {
               }
               isDup = false;
             }
+            //ここまで
             word = "";
           }
         }
@@ -113,6 +115,7 @@ export default {
       }
       this.answerText = "";
     },
+    //ここから
     randomWordsSelect: function() {
       this.selectWords = this.words
         .slice()
@@ -131,6 +134,7 @@ export default {
         .slice(0, 3);
       console.log(this.selectCategories);
     }
+    //ここまで
   }
 };
 </script>
