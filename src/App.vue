@@ -7,6 +7,11 @@
       <input type="text" v-model="answerText" />
       <button v-on:click="checkAnswer()">回答</button>
     </div>
+    <!-- 追加 -->
+    <div>
+      <a id="answer">{{ title }}</a>
+    </div>
+    <!-- ここまで -->
   </div>
 </template>
 <script>
@@ -17,7 +22,8 @@ export default {
       words: [],
       title: "",
       answerText: "",
-      categories: []
+      categories: [],
+      answerURL: "" //追加
     };
   },
   computed: {},
@@ -32,9 +38,12 @@ export default {
         this.content = res.data.query.pages[pageId].revisions[0]["*"];
         this.title = res.data.query.pages[pageId].title;
         this.content = res.data.query.pages[pageId].revisions[0]["*"];
+        this.answerURL = "https://ja.wikipedia.org/wiki/" + this.title;
         console.log(this.title);
         console.log(this.content);
         this.getWords(this.content);
+        var target = document.getElementById("answer"); //追加
+        target.href = this.answerURL; //追加
       });
     },
     getWords: function(str) {
