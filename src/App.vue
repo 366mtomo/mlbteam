@@ -3,15 +3,24 @@
     <div>
       <button v-on:click="getContents()">ボタン</button>
     </div>
+    <h3>ワード</h3>
+    <div v-for="(word, index) in selectWords" v-bind:key="`first-${index}`">
+      {{ word }}
+    </div>
+    <h3>カテゴリー</h3>
+    <div
+      v-for="(category, index) in selectCategories"
+      v-bind:key="`second-${index}`"
+    >
+      {{ category }}
+    </div>
     <div>
       <input type="text" v-model="answerText" />
       <button v-on:click="checkAnswer()">回答</button>
     </div>
-    <!-- 追加 -->
     <div>
       <a id="answer">{{ title }}</a>
     </div>
-    <!-- ここまで -->
   </div>
 </template>
 <script>
@@ -20,10 +29,12 @@ export default {
     return {
       content: "",
       words: [],
+      selectWords: [],
       title: "",
       answerText: "",
       categories: [],
-      answerURL: "" //追加
+      selectCategories: [],
+      answerURL: ""
     };
   },
   computed: {},
@@ -42,13 +53,16 @@ export default {
         console.log(this.title);
         console.log(this.content);
         this.getWords(this.content);
-        var target = document.getElementById("answer"); //追加
-        target.href = this.answerURL; //追加
+        this.randomWordsSelect();
+        this.randomCategoriesSelect();
+        var target = document.getElementById("answer");
+        target.href = this.answerURL;
       });
     },
     getWords: function(str) {
       let array = str.split("");
       let isLink = false;
+      let isDup = false;
       let word = "";
       this.words = [];
       for (let i = 1; i < array.length - 1; i++) {
@@ -57,9 +71,24 @@ export default {
             isLink = false;
             if (word.match(/Category:/)) {
               word = word.split("Category:").join("");
-              this.categories.push(word);
+              for (let t = 0; t < this.categories; t++) {
+                if (this.categories[t] === word) {
+                  isDup = true;
+                }
+              }
+              if (!isDup) {
+                this.categories.push(word);
+              }
             } else {
-              this.words.push(word);
+              for (let j = 0; j < this.words; j++) {
+                if (this.words[j] === word) {
+                  isDup = true;
+                }
+              }
+              if (!isDup) {
+                this.words.push(word);
+              }
+              isDup = false;
             }
             word = "";
           }
@@ -83,6 +112,24 @@ export default {
         console.log("残念！");
       }
       this.answerText = "";
+    },
+    randomWordsSelect: function() {
+      this.selectWords = this.words
+        .slice()
+        .sort(function() {
+          return Math.random() - 0.5;
+        })
+        .slice(0, 9);
+      console.log(this.selectWords);
+    },
+    randomCategoriesSelect: function() {
+      this.selectCategories = this.categories
+        .slice()
+        .sort(function() {
+          return Math.random() - 0.5;
+        })
+        .slice(0, 3);
+      console.log(this.selectCategories);
     }
   }
 };
