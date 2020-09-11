@@ -135,7 +135,7 @@ export default {
       console.log(this.selectCategories);
 
       this.initial = this.title.substr(0, 1);
-      this.answerLength = this.title.length;
+      this.answerLength = this.title.trim().length;
       console.log(this.initial);
       console.log(this.answerLength);
     }
